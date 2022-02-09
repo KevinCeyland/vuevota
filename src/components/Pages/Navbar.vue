@@ -1,6 +1,6 @@
 <template>
   <div data-app>
-    <v-app-bar color="deep-purple accent-4" dark prominent>
+    <v-app-bar color="light-blue darken-4" dark prominent>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>
@@ -9,7 +9,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon @click="navigate('Connexion')" color="#7B0D1E" fab>
+      <v-btn icon @click="navigate('Connexion')" color="#FF0000" fab>
         <v-icon>mdi-power</v-icon>
       </v-btn>
 
@@ -25,7 +25,7 @@
           active-class="deep-purple--text text--accent-4"
         >
           <v-list-item>
-            <v-list-item-title @click="navigate('Accueil')"
+            <v-list-item-title @click="navigate('Home')"
               >Accueil
             </v-list-item-title>
           </v-list-item>
@@ -36,11 +36,6 @@
             </v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title @click="navigate('EnSavoirPlus')">
-              En savoir plus ...
-            </v-list-item-title>
-          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
