@@ -4,8 +4,8 @@ import router from "/src/router";
 export default {
     namespaced: true,
     state: {
-        candidats: Array,
-        candidatSelected: Array,
+        candidats: [],
+        candidatSelected: [],
         candidatFind: null,
         dataload: false,
     },
@@ -35,8 +35,8 @@ export default {
         },
     },
     getters: {
-        getCandidats: (state) => (limite) => {
-            return state.candidats.slice(0, limite)
+        getCandidats(state) {
+            return state.candidats
         },
         getCandidatsLength(state) {
             return state.candidats.length
@@ -53,8 +53,8 @@ export default {
 
     },
     actions: {
-        setCandidats({ commit }) {
-            axios.get('/candidat/index').then((response) => {
+        setCandidats({ commit }, idElection) {
+            axios.get('/candidat/index/' + idElection).then((response) => {
                 commit('SET_ELECTIONS', response.data.candidats)
                 commit('SET_DATALOAD', true)
             }).catch(function(error) {
