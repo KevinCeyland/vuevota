@@ -4,6 +4,7 @@
       <div class="d-flex justify-content-center p-5">
         <vue-typed-js
           :loop="true"
+          :typeSpeed="50"
           :strings="[
             'Vous voulez voter en ligne ?',
             'Pour une éléctions présidentiel ?',
@@ -55,15 +56,18 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">
-            Sur tous vos appareils !
-          </h2>
+          <h2 class="featurette-heading">Sur tous vos appareils !</h2>
           <p class="lead">
-            Vous pouvez voter aussi bien depuis votre téléphone, tablette et ordinateur !
+            Vous pouvez voter aussi bien depuis votre téléphone, tablette et
+            ordinateur !
           </p>
         </div>
         <div class="col-md-5">
-          <v-img width="400" height="350" src="/img/vote-responsive.jpg"></v-img>
+          <v-img
+            width="400"
+            height="350"
+            src="/img/vote-responsive.jpg"
+          ></v-img>
         </div>
       </div>
     </v-container>

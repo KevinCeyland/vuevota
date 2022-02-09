@@ -3,8 +3,10 @@ import store from "@/store/index.js";
 import VueRouter from 'vue-router'
 import Home from '@/views/home/Home.vue'
 import Authentification from "@/views/login/Authentification.vue"
-import Vote from "@/views/vote/Vote.vue"
+import Elections from "@/components/vote/Elections.vue"
 import Profil from "@/views/profil/Profil.vue"
+import Candidats from "@/components/vote/Candidats.vue"
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -13,14 +15,20 @@ const router = new VueRouter({
             path: '/',
             name: 'Home',
             component: Home,
+        },
+        {
+            path: '/je-vote-en-ligne',
+            name: 'Elections',
+            component: Elections,
             meta: {
                 requiresAuth: true
             },
         },
         {
-            path: '/je-vote-en-ligne',
-            name: 'Vote',
-            component: Vote,
+            path: '/je-vote-en-ligne/:idElection/candidats',
+            name: 'Candidats',
+            props: true,
+            component: Candidats,
             meta: {
                 requiresAuth: true
             },

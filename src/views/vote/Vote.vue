@@ -8,6 +8,9 @@
 import Elections from "@/components/vote/Elections.vue";
 export default {
   components: { Elections },
+  methods: {
+    
+  }
 };
 </script>
 

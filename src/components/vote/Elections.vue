@@ -1,31 +1,23 @@
 <template>
   <div>
     <v-container fluid>
+      <h1 class="text-center pb-5 pt-3">Je choisis l'éléction</h1>
       <v-row dense>
-        <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+        <v-col v-for="election in elections" :key="election.id" :cols="6">
           <v-card>
             <v-img
-              :src="card.src"
-              class="white--text align-end"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              height="200px"
-            >
-              <v-card-title v-text="card.title"></v-card-title>
-            </v-img>
+              src="https://upload.wikimedia.org/wikipedia/fr/3/38/Logo_de_la_R%C3%A9publique_fran%C3%A7aise_%281999%29.svg"
+            ></v-img>
+            <v-card-title
+              class="text-break"
+              v-text="election.libelle"
+            ></v-card-title>
 
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-
-              <v-btn icon>
-                <v-icon>mdi-bookmark</v-icon>
-              </v-btn>
-
-              <v-btn icon>
-                <v-icon>mdi-share-variant</v-icon>
+              <v-btn icon @click="goToCandidat(election)">
+                <v-icon>mdi-location-enter</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -39,24 +31,35 @@
 export default {
   data() {
     return {
-      cards: [
-        {
-          title: "Pre-fab homes",
-          src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
-          flex: 12,
-        },
-        {
-          title: "Favorite road trips",
-          src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-          flex: 12,
-        },
-        {
-          title: "Best airlines",
-          src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
-          flex: 12,
-        },
-      ],
+      elections: [],
     };
+  },
+  mounted() {
+    if (this.$store.getters["elections/getElections"].length == 0) {
+      this.$store.dispatch("elections/setElections").then(() => {
+        var refreshIntervalId = setInterval(() => {
+          if (this.$store.getters["elections/dataLoad"]) {
+            this.elections = this.$store.getters["elections/getElections"];
+            clearInterval(refreshIntervalId);
+          }
+        }, 500);
+      });
+    } else {
+      var refreshIntervalId2 = setInterval(() => {
+        if (this.$store.getters["elections/dataLoad"]) {
+          this.elections = this.$store.getters["elections/getElections"];
+          clearInterval(refreshIntervalId2);
+        }
+      }, 500);
+    }
+  },
+  methods: {
+    goToCandidat(election) {
+      this.$router.push({
+        name: "Candidats",
+        params: { idElection: election.id },
+      });
+    },
   },
 };
 </script>

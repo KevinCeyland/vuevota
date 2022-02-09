@@ -4,8 +4,8 @@ import router from "/src/router";
 export default {
     namespaced: true,
     state: {
-        elections: Array,
-        electionSelected: Array,
+        elections: [],
+        electionSelected: [],
         electionFind: null,
         dataload: false,
     },
@@ -35,11 +35,8 @@ export default {
         },
     },
     getters: {
-        getElections: (state) => (limite) => {
-            return state.elections.slice(0, limite)
-        },
-        getElectionsLength(state) {
-            return state.elections.length
+        getElections(state) {
+            return state.elections
         },
         getElectionFind(state) {
             return state.electionFind
