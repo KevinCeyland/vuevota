@@ -10,7 +10,7 @@
             ></v-img>
             <v-card-title
               class="text-break"
-              style="font-size:30px"
+              style="font-size:25px"
               v-text="election.libelle"
             ></v-card-title>
           </v-card>

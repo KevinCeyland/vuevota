@@ -41,24 +41,27 @@
       temporary
     >
       <v-list nav dense>
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item
+        <v-list-item-group v-model="group">
+          <template
             v-for="item in menuItems"
-            :key="item.title"
-            :to="item.path"
+            active-class="deep-purple--text text--accent-4"
           >
-            <v-list-item-icon>
-              <v-icon left>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title> {{ item.title }}</v-list-item-title>
-          </v-list-item>
+            <v-list-item
+              active-class="bg-p text-white"
+              :to="item.path"
+              :key="item.title"
+              v-if="item.auth == isAuth"
+            >
+              <v-list-item-icon>
+                <v-icon left>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title> {{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </template>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-     <v-dialog v-model="dialogSignout" persistent max-width="290">
+    <v-dialog v-model="dialogSignout" persistent max-width="290">
       <v-card>
         <v-toolbar class="lead">Que voulez-vous faire ?</v-toolbar>
         <v-card-text>
