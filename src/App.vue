@@ -9,15 +9,13 @@
 </template>
 
 <script>
-import Navbar from "@/components/Pages/Navbar.vue";
-import Footer from "@/components/Pages/Footer.vue";
+import Navbar from "@/components/pages/Navbar.vue";
 
 export default {
   name: "App",
 
   components: {
     Navbar,
-    Footer,
   },
 
   data: () => ({

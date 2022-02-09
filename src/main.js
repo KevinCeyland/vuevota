@@ -5,14 +5,23 @@ import store from './store'
 import axios from "axios"
 import Vuex from 'vuex'
 import vuetify from './plugins/vuetify'
+import VueSweetalert2 from 'vue-sweetalert2';
+import { VueTypedJs } from 'vue-typed-js'
 
+Vue.use(VueTypedJs)
 Vue.config.productionTip = false
+
 Vue.use(Vuex)
+Vue.use(VueSweetalert2);
+require("@/store/subscriber");
 
 Vue.prototype.$axios = axios
 Vue.prototype.$store = store
 
 axios.defaults.baseURL = "http://laravota/api/"
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
+
+store.dispatch("auth/attempt", localStorage.getItem("token"));
 
 new Vue({
     router,
