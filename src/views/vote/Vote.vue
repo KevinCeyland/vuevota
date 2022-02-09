@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Elections></Elections>
+    <elections></elections>
   </div>
 </template>
 

@@ -4,7 +4,6 @@
       <span class="hidden-sm-and-up">
         <v-app-bar-nav-icon
           v-if="showMobileNav"
-          dark
           @click="drawer = true"
         ></v-app-bar-nav-icon>
       </span>
