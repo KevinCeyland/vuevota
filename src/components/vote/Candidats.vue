@@ -53,7 +53,7 @@
             @click="dialogConfirmVote = false"
             >NON</v-btn
           >
-          <v-btn class="text-white bg-primary" @click="confirmVote()"
+          <v-btn class="text-white" color="#000091" @click="confirmVote()"
             >OUI</v-btn
           >
         </v-card-actions>
