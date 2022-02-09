@@ -4,22 +4,15 @@
       <h1 class="text-center pb-5 pt-3">Je choisis l'éléction</h1>
       <v-row dense>
         <v-col v-for="election in elections" :key="election.id" :cols="6">
-          <v-card>
+          <v-card @click="goToCandidat(election)">
             <v-img
               src="https://upload.wikimedia.org/wikipedia/fr/3/38/Logo_de_la_R%C3%A9publique_fran%C3%A7aise_%281999%29.svg"
             ></v-img>
             <v-card-title
               class="text-break"
+              style="font-size:30px"
               v-text="election.libelle"
             ></v-card-title>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn icon @click="goToCandidat(election)">
-                <v-icon>mdi-location-enter</v-icon>
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
