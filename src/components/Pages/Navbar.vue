@@ -14,7 +14,7 @@
         </router-link>
       </v-toolbar-title>
       <router-link to="/" tag="span" style="cursor: pointer">
-        <h1 style="font-family: Spectral">Vota</h1>
+        <h1 style="font-family: Spectral">Vota.gouv</h1>
       </router-link>
       <v-spacer></v-spacer>
       <v-toolbar-items v-if="!showMobileNav" class="hidden-xs-only">

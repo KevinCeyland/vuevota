@@ -6,7 +6,9 @@ import axios from "axios"
 import Vuex from 'vuex'
 import vuetify from './plugins/vuetify'
 import VueSweetalert2 from 'vue-sweetalert2';
+import { VueTypedJs } from 'vue-typed-js'
 
+Vue.use(VueTypedJs)
 Vue.config.productionTip = false
 
 Vue.use(Vuex)
