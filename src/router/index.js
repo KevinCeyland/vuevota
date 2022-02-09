@@ -6,6 +6,7 @@ import Authentification from "@/views/login/Authentification.vue"
 import Elections from "@/components/vote/Elections.vue"
 import Profil from "@/views/profil/Profil.vue"
 import Candidats from "@/components/vote/Candidats.vue"
+import Admin from "@/views/admin/Admin.vue"
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,24 @@ const router = new VueRouter({
             meta: {
                 requiresAuth: true
             },
+        },
+        {
+            path: '/admin-panel',
+            name: 'Admin',
+            component: Admin,
+            meta: {
+                requiresAuth: true
+            },
+            beforeEnter: (to, from, next) => {
+                setTimeout(() => {
+                    if (store.getters["auth/user"]['role'] != "Administrateur") {
+                        next("/");
+                    } else {
+                        next();
+                    }
+                }, 500)
+
+            }
         },
         {
             path: '/authentification',

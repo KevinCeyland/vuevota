@@ -28,6 +28,10 @@
             {{ item.title }}
           </v-btn>
         </template>
+        <v-btn to="/admin-panel" text v-if="user.role == 'Administrateur'">
+          <v-icon left>mdi-account-tie</v-icon>
+          Panel Admin
+        </v-btn>
         <v-btn text v-if="isAuth" @click="openModalConfirmSignout()">
           <v-icon left>mdi-logout</v-icon>
           Deconnexion
@@ -58,6 +62,27 @@
               <v-list-item-title> {{ item.title }}</v-list-item-title>
             </v-list-item>
           </template>
+
+          <v-list-item
+            active-class="bg-p text-white"
+            to="/admin-panel"
+            v-if="user.role == 'Administrateur'"
+          >
+            <v-list-item-icon>
+              <v-icon left>mdi-account-tie</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Panel Admin</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            active-class="bg-p text-white"
+            v-if="isAuth"
+            @click="openModalConfirmSignout()"
+          >
+            <v-list-item-icon>
+              <v-icon left>mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Deconnexion</v-list-item-title>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
