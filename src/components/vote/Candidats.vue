@@ -74,25 +74,14 @@ export default {
   },
   props: ["idElection"],
   mounted() {
-    if (this.$store.getters["candidat/getCandidats"].length == 0) {
-      this.$store
-        .dispatch("candidat/setCandidats", this.idElection)
-        .then(() => {
-          var refreshIntervalId = setInterval(() => {
-            if (this.$store.getters["candidat/dataLoadCandidat"]) {
-              this.candidats = this.$store.getters["candidat/getCandidats"];
-              clearInterval(refreshIntervalId);
-            }
-          }, 500);
-        });
-    } else {
-      var refreshIntervalId2 = setInterval(() => {
+    this.$store.dispatch("candidat/setCandidats", this.idElection).then(() => {
+      var refreshIntervalId = setInterval(() => {
         if (this.$store.getters["candidat/dataLoadCandidat"]) {
           this.candidats = this.$store.getters["candidat/getCandidats"];
-          clearInterval(refreshIntervalId2);
+          clearInterval(refreshIntervalId);
         }
       }, 500);
-    }
+    });
   },
   methods: {
     selectedCandidat(candidat) {
@@ -102,8 +91,12 @@ export default {
       this.dialogConfirmVote = true;
     },
     confirmVote() {
+      var arrayPayload = {
+        idElection: this.idElection,
+        idCandidat: this.selectCandidat.id,
+      };
       this.$axios
-        .get("vote/voteCandidat/" + this.selectCandidat.id)
+        .post("vote/voteCandidatElection", arrayPayload)
         .then((response) => {
           if (response.data.messageError) {
             this.$swal(
@@ -124,7 +117,7 @@ export default {
             return;
           }
           this.$swal("A voter !", response.data.message, "success").then(() => {
-            this.$router.push({name: "Home"})
+            this.$router.push({ name: "Home" });
           });
           this.dialogConfirmVote = false;
         });

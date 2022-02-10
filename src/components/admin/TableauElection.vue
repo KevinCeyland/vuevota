@@ -44,6 +44,7 @@
                     <v-col cols="12">
                       <v-dialog
                         ref="menu"
+                        width="350"
                         v-model="menu"
                         :close-on-content-click="false"
                         :return-value.sync="editedItem.date_naissance"

@@ -80,6 +80,7 @@
                         :return-value.sync="editedItem.date_naissance"
                         transition="scale-transition"
                         offset-y
+                        width="350"
                         min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
