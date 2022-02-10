@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>Gestion des elections</h2>
     <v-data-table
       :headers="headers"
       :items="elections"
