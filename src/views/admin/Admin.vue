@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1 class="text-center p-3">Panel Admin</h1>
     <div class="pb-5">
       <div class="container">
         <v-alert class="mt-5" dark>
@@ -36,7 +35,6 @@
               <v-card
                 class="text-center border border-dark"
                 color="#1190ba"
-                dark
               >
                 <v-footer padless>
                   <v-card class="flex p-1" flat tile color="#11acba">
@@ -71,8 +69,7 @@
                         >
 
                         <strong class="subheading text-white"
-                          >Représentation de toutes les déclaration journalieres
-                          dans le temps</strong
+                          >Attributions d'une elections à un candidat</strong
                         >
                       </v-card-title>
                     </v-card>
