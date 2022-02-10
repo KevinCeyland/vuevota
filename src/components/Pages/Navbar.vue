@@ -133,12 +133,6 @@ export default {
         icon: "mdi-account-circle",
         auth: false,
       },
-      {
-        title: "Profil",
-        path: "/profil",
-        icon: "mdi-account-circle",
-        auth: true,
-      },
     ],
     windowSize: {
       x: 0,

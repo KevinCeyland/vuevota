@@ -4,7 +4,6 @@ import VueRouter from 'vue-router'
 import Home from '@/views/home/Home.vue'
 import Authentification from "@/views/login/Authentification.vue"
 import Elections from "@/components/vote/Elections.vue"
-import Profil from "@/views/profil/Profil.vue"
 import Candidats from "@/components/vote/Candidats.vue"
 import Admin from "@/views/admin/Admin.vue"
 
@@ -30,14 +29,6 @@ const router = new VueRouter({
             name: 'Candidats',
             props: true,
             component: Candidats,
-            meta: {
-                requiresAuth: true
-            },
-        },
-        {
-            path: '/profil',
-            name: 'Profil',
-            component: Profil,
             meta: {
                 requiresAuth: true
             },
