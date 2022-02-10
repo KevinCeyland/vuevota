@@ -116,10 +116,13 @@
                       ></v-textarea>
                     </v-col>
                     <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.partie_politique"
+                      <v-select
+                        item-text="libelle"
+                        item-value="id"
+                        v-model="editedItem.partie_politique_id"
+                        :items="partie_politique"
                         label="Partie politique"
-                      ></v-text-field>
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -180,7 +183,7 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
-     inputFileSelect: require("/src/assets/placeholder.jpg"),
+    inputFileSelect: require("/src/assets/placeholder.jpg"),
     headers: [
       { text: "Photo", value: "photo" },
       { text: "Nom", value: "nom" },
@@ -190,25 +193,28 @@ export default {
       { text: "Partie Politique", value: "partie_politique" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    candidats: [],
+
     menu: false,
     editedIndex: -1,
     editedItem: {
       photo: "",
       nom: "",
       prenom: "",
+      changePhoto: "",
       programme: "",
       date_naissance: "",
       partie_politique: "",
     },
     defaultItem: {
       photo: "",
+      changePhoto: "",
       nom: "",
       prenom: "",
       programme: "",
       date_naissance: "",
       partie_politique: "",
     },
+    partie_politique: [],
   }),
 
   computed: {
@@ -216,6 +222,9 @@ export default {
       return this.editedIndex === -1
         ? "Nouveau candidat"
         : "Editer le candidat";
+    },
+    candidats() {
+      return this.$store.getters["candidat/getCandidatsAll"];
     },
   },
 
@@ -229,26 +238,33 @@ export default {
   },
 
   mounted() {
-    if (this.$store.getters["candidat/getCandidatsAll"].length == 0) {
-      this.$store.dispatch("candidat/setAllCandidats").then(() => {
-        var refreshIntervalId = setInterval(() => {
-          if (this.$store.getters["candidat/dataLoadCandidatAll"]) {
-            this.candidats = this.$store.getters["candidat/getCandidatsAll"];
-            clearInterval(refreshIntervalId);
-          }
-        }, 500);
-      });
-    } else {
-      var refreshIntervalId2 = setInterval(() => {
-        if (this.$store.getters["candidat/dataLoadCandidatAll"]) {
-          this.candidats = this.$store.getters["candidat/getCandidatsAll"];
-          clearInterval(refreshIntervalId2);
-        }
-      }, 500);
-    }
+    this.initTable();
   },
 
   methods: {
+    initTable() {
+      if (this.$store.getters["candidat/getCandidatsAll"].length == 0) {
+        this.$store.dispatch("candidat/setAllCandidats").then(() => {
+          var refreshIntervalId = setInterval(() => {
+            if (this.$store.getters["candidat/dataLoadCandidatAll"]) {
+              this.candidats = this.$store.getters["candidat/getCandidatsAll"];
+              this.partie_politique =
+                this.$store.getters["candidat/getPartiePolitiques"];
+              clearInterval(refreshIntervalId);
+            }
+          }, 500);
+        });
+      } else {
+        var refreshIntervalId2 = setInterval(() => {
+          if (this.$store.getters["candidat/dataLoadCandidatAll"]) {
+            this.candidats = this.$store.getters["candidat/getCandidatsAll"];
+            this.partie_politique =
+              this.$store.getters["candidat/getPartiePolitiques"];
+            clearInterval(refreshIntervalId2);
+          }
+        }, 500);
+      }
+    },
     editItem(item) {
       this.editedIndex = this.candidats.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -263,15 +279,19 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.candidats.splice(this.editedIndex, 1);
-      this.closeDelete();
+      this.$store
+        .dispatch("candidat/removeCandidat", this.editedItem.id)
+        .then((response) => {
+          this.$swal("Bravo !", response.data.message, "success");
+          this.closeDelete();
+        });
     },
-
     close() {
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+        this.inputFileSelect = require("/src/assets/placeholder.jpg");
       });
     },
 
@@ -284,10 +304,42 @@ export default {
     },
 
     save() {
+      let formData = new FormData();
+
+      formData.append("nom", this.editedItem.nom);
+      formData.append("prenom", this.editedItem.prenom);
+      formData.append("date_naissance", this.editedItem.date_naissance);
+      formData.append("programme", this.editedItem.programme);
+      formData.append("photo", this.editedItem.photo);
+      formData.append(
+        "partie_politique_id",
+        this.editedItem.partie_politique_id
+      );
+      formData.append("changePhoto", this.editedItem.changePhoto);
+
       if (this.editedIndex > -1) {
-        Object.assign(this.candidats[this.editedIndex], this.editedItem);
+        var payloadUpdate = {
+          id: this.editedItem.id,
+          nom: this.editedItem.nom,
+          prenom: this.editedItem.prenom,
+          date_naissance: this.editedItem.date_naissance,
+          programme: this.editedItem.programme,
+          photo: this.editedItem.photo,
+          partie_politique_id: this.editedItem.partie_politique_id,
+          changePhoto: this.editedItem.changePhoto,
+        };
+        console.log(payloadUpdate);
+        this.$store
+          .dispatch("candidat/editCandidat", payloadUpdate)
+          .then((response) => {
+            this.$swal("Bravo !", response.data.message, "success");
+          });
       } else {
-        this.candidats.push(this.editedItem);
+        this.$store
+          .dispatch("candidat/addCandidat", formData)
+          .then((response) => {
+            this.$swal("Bravo !", response.data.message, "success");
+          });
       }
       this.close();
     },
@@ -299,6 +351,7 @@ export default {
       var reader = new FileReader();
       var image = event.target.files[0];
       this.editedItem.photo = event.target.files[0];
+      this.editedItem.changePhoto = true;
       reader.readAsDataURL(image);
       reader.onload = () => {
         this.inputFileSelect = reader.result;
