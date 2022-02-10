@@ -89,6 +89,7 @@ export default {
         }, payload) {
             var arrayPayload = {
                 libelle: payload.libelle,
+                arrayCandidats: payload.arrayCandidats,
                 dateElection: payload.dateElection
             }
             return new Promise((resolve, reject) => {
@@ -116,6 +117,7 @@ export default {
         }, payload) {
             var arrayPayload = {
                 libelle: payload.libelle,
+                arrayCandidats: payload.arrayCandidats,
                 dateElection: payload.dateElection
             }
             return new Promise((resolve, reject) => {

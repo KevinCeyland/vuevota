@@ -87,6 +87,37 @@
                         </v-date-picker>
                       </v-dialog>
                     </v-col>
+                    <v-list dense>
+                      <v-subheader
+                        >Listes des candidats participants à cette
+                        éléctions</v-subheader
+                      >
+                      <v-list-item-group
+                        multiple
+                        v-model="editedItem.arrayCandidats"
+                        color="primary"
+                      >
+                        <v-list-item
+                          v-for="item in candidats"
+                          :key="item.id"
+                          :value="item.id"
+                        >
+                          <template v-slot:default="{ active }">
+                            <v-list-item-action>
+                              <v-checkbox
+                                :input-value="active"
+                                color="primary"
+                              ></v-checkbox>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                              <v-list-item-title
+                                v-text="item.nom"
+                              ></v-list-item-title>
+                            </v-list-item-content>
+                          </template>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -161,10 +192,12 @@ export default {
     editedIndex: -1,
     editedItem: {
       libelle: "",
+      arrayCandidats: [],
       dateElection: "",
     },
     defaultItem: {
       libelle: "",
+      arrayCandidats: [],
       dateElection: "",
     },
   }),
@@ -178,6 +211,9 @@ export default {
     elections() {
       return this.$store.getters["elections/getElections"];
     },
+    candidats() {
+      return this.$store.getters["candidat/getCandidatsAll"];
+    },
   },
 
   watch: {
@@ -190,6 +226,7 @@ export default {
   },
 
   mounted() {
+    this.$store.dispatch("candidat/setAllCandidats");
     if (this.$store.getters["elections/getElections"].length == 0) {
       this.$store.dispatch("elections/setElections");
     }
