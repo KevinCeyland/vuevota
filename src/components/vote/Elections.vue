@@ -3,10 +3,10 @@
     <v-container fluid>
       <h1 class="text-center pb-5 pt-3">Je choisis l'éléction</h1>
       <v-row dense>
-        <v-col v-for="election in elections" :key="election.id" :cols="6">
+        <v-col v-for="election in elections" :key="election.id" :cols="3">
           <v-card @click="goToCandidat(election)">
             <v-img
-              src="https://upload.wikimedia.org/wikipedia/fr/3/38/Logo_de_la_R%C3%A9publique_fran%C3%A7aise_%281999%29.svg"
+              src="/img/vote-elections.png"
             ></v-img>
             <v-card-title
               class="text-break"

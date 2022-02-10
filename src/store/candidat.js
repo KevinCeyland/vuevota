@@ -5,31 +5,39 @@ export default {
     namespaced: true,
     state: {
         candidats: [],
+        candidatsAll: [],
         candidatSelected: [],
         candidatFind: null,
-        dataload: false,
+        dataloadCandidat: false,
+        dataloadCandidatAll: false,
     },
     mutations: {
-        SET_ELECTIONS(state, datas) {
+        SET_CANDIDATS(state, datas) {
             state.candidats = datas
         },
-        SET_ELECTION_FIND(state, data) {
+        SET_CANDIDATS_ALL(state, datas) {
+            state.candidatsAll = datas
+        },
+        SET_CANDIDAT_FIND(state, data) {
             state.candidatFind = data
         },
-        SET_DATALOAD(state, data) {
-            state.dataload = data
+        SET_DATALOAD_CANDIDAT(state, data) {
+            state.dataloadCandidat = data
         },
-        ADD_ELECTION(state, data) {
+        SET_DATALOAD_CANDIDAT_ALL(state, data) {
+            state.dataloadCandidatAll = data
+        },
+        ADD_CANDIDAT(state, data) {
             state.candidats.push(data)
         },
-        EDIT_ELECTION(state, data) {
+        EDIT_CANDIDAT(state, data) {
             state.candidats = state.candidats.map(candidat => {
                 if (candidat.id === data.id) {
                     return Object.assign({}, candidat, data)
                 }
             })
         },
-        REMOVE_ELECTION(state, id) {
+        REMOVE_CANDIDAT(state, id) {
             var index = state.candidats.findIndex(candidat => candidat.id == id)
             state.candidats.splice(index, 1)
         },
@@ -38,14 +46,20 @@ export default {
         getCandidats(state) {
             return state.candidats
         },
+        getCandidatsAll(state) {
+            return state.candidatsAll
+        },
         getCandidatsLength(state) {
             return state.candidats.length
         },
         getCandidatFind(state) {
             return state.candidatFind
         },
-        dataLoad(state) {
-            return state.dataload
+        dataLoadCandidat(state) {
+            return state.dataloadCandidat
+        },
+        dataLoadCandidatAll(state) {
+            return state.dataloadCandidatAll
         },
         getCandidatById: (state) => (id) => {
             return state.candidats.find(candidat => candidat.id == id)
@@ -53,10 +67,24 @@ export default {
 
     },
     actions: {
+        setAllCandidats({ commit }) {
+            axios.get('/candidat/indexAll').then((response) => {
+                commit('SET_CANDIDATS_ALL', response.data.candidats)
+                commit('SET_DATALOAD_CANDIDAT_ALL', true)
+            }).catch(function(error) {
+                if (error.response.status === 401) {
+                    setTimeout(() => {
+                        router.push({
+                            name: "Authentification"
+                        });
+                    }, 1200);
+                }
+            });
+        },
         setCandidats({ commit }, idElection) {
             axios.get('/candidat/index/' + idElection).then((response) => {
-                commit('SET_ELECTIONS', response.data.candidats)
-                commit('SET_DATALOAD', true)
+                commit('SET_CANDIDATS', response.data.candidats)
+                commit('SET_DATALOAD_CANDIDAT', true)
             }).catch(function(error) {
                 if (error.response.status === 401) {
                     setTimeout(() => {
@@ -73,7 +101,7 @@ export default {
                     if (response.data.messageError) {
                         resolve(response)
                     }
-                    commit('SET_ELECTION_FIND', response.data)
+                    commit('SET_CANDIDAT_FIND', response.data)
                     resolve(response)
                 }).catch(function(error) {
                     if (error.response.status === 401) {
@@ -97,7 +125,7 @@ export default {
                     if (response.data.messageError) {
                         resolve(response)
                     }
-                    commit('ADD_ELECTION', response.data.candidat)
+                    commit('ADD_CANDIDAT', response.data.candidat)
                     resolve(response)
                 }).catch(function(error) {
                     if (error.response.status === 401) {
@@ -121,7 +149,7 @@ export default {
                     if (response.data.messageError) {
                         resolve(response)
                     }
-                    commit('EDIT_ELECTION', response.data.candidat)
+                    commit('EDIT_CANDIDAT', response.data.candidat)
                     resolve(response)
                 }).catch(function(error) {
                     if (error.response.status === 401) {
@@ -140,7 +168,7 @@ export default {
                     if (response.data.messageError) {
                         resolve(response)
                     }
-                    commit('REMOVE_ELECTION', id)
+                    commit('REMOVE_CANDIDAT', id)
                     resolve(response)
                 }).catch(function(error) {
                     if (error.response.status === 401) {

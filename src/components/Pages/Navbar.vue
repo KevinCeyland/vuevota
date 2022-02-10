@@ -101,7 +101,7 @@
             @click="dialogSignout = false"
             >NON</v-btn
           >
-          <v-btn class="text-white bg-primary" @click="confirmSignout()"
+          <v-btn class="text-white" color="#000091" @click="confirmSignout()"
             >OUI</v-btn
           >
         </v-card-actions>

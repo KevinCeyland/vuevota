@@ -78,7 +78,7 @@ export default {
         .dispatch("candidat/setCandidats", this.idElection)
         .then(() => {
           var refreshIntervalId = setInterval(() => {
-            if (this.$store.getters["candidat/dataLoad"]) {
+            if (this.$store.getters["candidat/dataLoadCandidat"]) {
               this.candidats = this.$store.getters["candidat/getCandidats"];
               clearInterval(refreshIntervalId);
             }
@@ -86,7 +86,7 @@ export default {
         });
     } else {
       var refreshIntervalId2 = setInterval(() => {
-        if (this.$store.getters["candidat/dataLoad"]) {
+        if (this.$store.getters["candidat/dataLoadCandidat"]) {
           this.candidats = this.$store.getters["candidat/getCandidats"];
           clearInterval(refreshIntervalId2);
         }
