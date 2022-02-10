@@ -18,10 +18,12 @@
                 {{ candidat.prenom + " " + candidat.nom }}
               </h2></v-list-item-title
             >
-            <v-list-item-subtitle
-              class="text-break"
-              v-text="candidat.programme"
-            ></v-list-item-subtitle>
+            <div class="" style="width: 6rem"></div>
+            <div class="border border-light p-3 mb-4">
+              <div class="text-wrap" style="width: 50rem">
+                {{ candidat.programme }}
+              </div>
+            </div>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
