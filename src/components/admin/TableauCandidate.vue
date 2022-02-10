@@ -9,6 +9,9 @@
       <template v-slot:item.photo="{ item }">
         <v-img width="50" :src="item.photo"></v-img>
       </template>
+      <template v-slot:item.programme="{ item }">
+        {{ strMimified(item.programme) }}
+      </template>
       <template v-slot:top>
         <v-toolbar flat>
           <v-divider class="mx-4" inset vertical></v-divider>
@@ -35,13 +38,12 @@
                     <v-col cols="12">
                       <h4 class="text-center">Photo du candidat</h4>
                       <div class="d-flex justify-content-center">
-                        <img
+                        <v-img
                           width="180"
                           style="cursor: pointer"
-                          height="150"
                           @click="triggerInputFile()"
                           :src="inputFileSelect"
-                        />
+                        ></v-img>
                         <input
                           type="file"
                           id="couverture-tuto"
@@ -54,12 +56,18 @@
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
+                        prepend-inner-icon="mdi-account"
+                        solo
+                        :rules="requiredRules"
                         v-model="editedItem.nom"
                         label="Nom"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
+                        prepend-inner-icon="mdi-account"
+                        solo
+                        :rules="requiredRules"
                         v-model="editedItem.prenom"
                         label="Prénom"
                       ></v-text-field>
@@ -78,7 +86,9 @@
                           <v-text-field
                             v-model="editedItem.date_naissance"
                             label="Date de naissance"
-                            prepend-icon="mdi-calendar"
+                            :rules="requiredRules"
+                            prepend-inner-icon="mdi-calendar"
+                            solo
                             readonly
                             v-bind="attrs"
                             v-on="on"
@@ -112,12 +122,17 @@
                       <v-textarea
                         v-model="editedItem.programme"
                         label="Programme"
+                        prepend-inner-icon="mdi-clipboard-text"
+                        solo
                       ></v-textarea>
                     </v-col>
                     <v-col cols="12">
                       <v-select
                         item-text="libelle"
+                        prepend-inner-icon="mdi-chevron-triple-up"
+                        solo
                         item-value="id"
+                        :rules="requiredRules"
                         v-model="editedItem.partie_politique_id"
                         :items="partie_politique"
                         label="Partie politique"
@@ -192,7 +207,12 @@ export default {
       { text: "Partie Politique", value: "partie_politique" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-
+    requiredRules: [(v) => !!v || "Le champ est obligatoire"],
+    numberRules: [
+      (v) => !!v || "Le champ est obligatoire",
+      (v) => !isNaN(v) || "Ce n'est pas un nombre",
+    ],
+    numberRulesWithoutRequired: [(v) => !isNaN(v) || "Ce n'est pas un nombre"],
     menu: false,
     editedIndex: -1,
     editedItem: {
@@ -353,6 +373,13 @@ export default {
       reader.onload = () => {
         this.inputFileSelect = reader.result;
       };
+    },
+    strMimified(value) {
+      if (value.length > 30) {
+        return value.substring(0, 30) + "..";
+      } else {
+        return value;
+      }
     },
   },
 };

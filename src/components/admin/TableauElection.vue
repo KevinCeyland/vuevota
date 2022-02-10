@@ -35,7 +35,10 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.libelle"
+                        :rules="requiredRules"
                         label="Nom"
+                        solo
+                        prepend-inner-icon="mdi-format-title"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
@@ -52,7 +55,9 @@
                           <v-text-field
                             v-model="editedItem.dateElection"
                             label="Date de l'éléction"
-                            prepend-icon="mdi-calendar"
+                            prepend-inner-icon="mdi-calendar"
+                            solo
+                            :rules="requiredRules"
                             readonly
                             v-bind="attrs"
                             v-on="on"
@@ -146,7 +151,12 @@ export default {
       { text: "Date de l'éléction", value: "dateElection" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-
+    requiredRules: [(v) => !!v || "Le champ est obligatoire"],
+    numberRules: [
+      (v) => !!v || "Le champ est obligatoire",
+      (v) => !isNaN(v) || "Ce n'est pas un nombre",
+    ],
+    numberRulesWithoutRequired: [(v) => !isNaN(v) || "Ce n'est pas un nombre"],
     menu: false,
     editedIndex: -1,
     editedItem: {
@@ -223,9 +233,7 @@ export default {
     },
 
     save() {
-
       if (this.editedIndex > -1) {
- 
         this.$store
           .dispatch("elections/editElection", this.editedItem)
           .then((response) => {

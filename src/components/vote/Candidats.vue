@@ -30,6 +30,7 @@
       class="float-end m-5 text-white"
       @click="voteForCandidat()"
       color="#000091"
+      :disabled="selectCandidat.length == 0"
       >Je vote</v-btn
     >
     <v-dialog v-model="dialogConfirmVote" persistent max-width="500">
