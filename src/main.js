@@ -8,11 +8,14 @@ import vuetify from './plugins/vuetify'
 import VueSweetalert2 from 'vue-sweetalert2';
 import { VueTypedJs } from 'vue-typed-js'
 import 'sweetalert2/dist/sweetalert2.min.css';
+import HighchartsVue from 'highcharts-vue'
+
 Vue.use(VueTypedJs)
 Vue.config.productionTip = false
 
 Vue.use(Vuex)
 Vue.use(VueSweetalert2);
+Vue.use(HighchartsVue)
 require("@/store/subscriber");
 
 Vue.prototype.$axios = axios

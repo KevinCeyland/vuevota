@@ -6,6 +6,7 @@ import Authentification from "@/views/login/Authentification.vue"
 import Elections from "@/components/vote/Elections.vue"
 import Candidats from "@/components/vote/Candidats.vue"
 import Admin from "@/views/admin/Admin.vue"
+import Resultats from "@/components/vote/Resultats.vue"
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,15 @@ const router = new VueRouter({
             name: 'Candidats',
             props: true,
             component: Candidats,
+            meta: {
+                requiresAuth: true
+            },
+        },
+        {
+            path: '/resultats-du-vote/:idElection',
+            name: 'Resultats',
+            props: true,
+            component: Resultats,
             meta: {
                 requiresAuth: true
             },
