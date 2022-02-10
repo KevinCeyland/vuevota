@@ -247,7 +247,6 @@ export default {
         this.$store.dispatch("candidat/setAllCandidats").then(() => {
           var refreshIntervalId = setInterval(() => {
             if (this.$store.getters["candidat/dataLoadCandidatAll"]) {
-              this.candidats = this.$store.getters["candidat/getCandidatsAll"];
               this.partie_politique =
                 this.$store.getters["candidat/getPartiePolitiques"];
               clearInterval(refreshIntervalId);
@@ -257,7 +256,6 @@ export default {
       } else {
         var refreshIntervalId2 = setInterval(() => {
           if (this.$store.getters["candidat/dataLoadCandidatAll"]) {
-            this.candidats = this.$store.getters["candidat/getCandidatsAll"];
             this.partie_politique =
               this.$store.getters["candidat/getPartiePolitiques"];
             clearInterval(refreshIntervalId2);

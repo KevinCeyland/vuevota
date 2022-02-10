@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="mt-5">Gestion des elections</h2>
+    <h2>Gestion des elections</h2>
     <v-data-table
       :headers="headers"
       :items="elections"
@@ -16,8 +16,13 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Item
+              <v-btn
+                color="#000091"
+                class="mb-2 text-white"
+                v-bind="attrs"
+                v-on="on"
+              >
+                Créer une nouvelle election
               </v-btn>
             </template>
             <v-card>
@@ -28,35 +33,55 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.name"
-                        label="Dessert name"
+                        v-model="editedItem.libelle"
+                        label="Nom"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.calories"
-                        label="Calories"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.fat"
-                        label="Fat (g)"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.carbs"
-                        label="Carbs (g)"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.protein"
-                        label="Protein (g)"
-                      ></v-text-field>
+                    <v-col cols="12">
+                      <v-dialog
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :return-value.sync="editedItem.date_naissance"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="editedItem.dateElection"
+                            label="Date de l'éléction"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="editedItem.dateElection"
+                          no-title
+                          scrollable
+                        >
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="menu = false">
+                            Retour
+                          </v-btn>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="
+                              $refs.menu.save(editedItem.dateElection),
+                                (changeDate = Math.floor(
+                                  Math.random() * 10424240
+                                ))
+                            "
+                          >
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-dialog>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -64,35 +89,46 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancel
+                <v-btn @click="close"> Retour </v-btn>
+                <v-btn class="text-white" color="#000091" @click="save">
+                  Enregistrer
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-dialog v-model="dialogDelete" persistent max-width="290">
             <v-card>
-              <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
+              <v-toolbar class="lead">Que voulez-vous faire ?</v-toolbar>
+              <v-card-text>
+                <div class="text-dark text-center mt-3">
+                  <h3>Êtes vous sûr de vouloir supprimer ce election ?</h3>
+                </div>
+              </v-card-text>
+              <v-card-actions class="d-flex justify-content-center">
+                <v-btn
+                  class="text-dark bg-light"
+                  style="margin-right: 10px !important"
+                  @click="closeDelete"
+                  >NON</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
+                <v-btn
+                  class="text-white"
+                  color="#000091"
+                  @click="deleteItemConfirm()"
+                  >OUI</v-btn
                 >
-                <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon class="mr-2 text-primary" @click="editItem(item)">
+          mdi-pencil
+        </v-icon>
+        <v-icon class="mr-2 text-danger" @click="deleteItem(item)">
+          mdi-delete
+        </v-icon>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary"> Reset </v-btn>
@@ -108,24 +144,30 @@ export default {
     dialogDelete: false,
     headers: [
       { text: "Libelle", value: "libelle" },
-      { text: "Date naissance", value: "date_naissance" },
+      { text: "Date de l'éléction", value: "dateElection" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    elections: [],
+
+    menu: false,
     editedIndex: -1,
     editedItem: {
       libelle: "",
-      date_naissance: "",
+      dateElection: "",
     },
     defaultItem: {
       libelle: "",
-      date_naissance: "",
+      dateElection: "",
     },
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Nouveau election" : "Editer l'éléction";
+      return this.editedIndex === -1
+        ? "Nouvelle éléction"
+        : "Editer l'éléction";
+    },
+    elections() {
+      return this.$store.getters["elections/getElections"];
     },
   },
 
@@ -139,16 +181,9 @@ export default {
   },
 
   mounted() {
-    /*  this.$store.dispatch("election/setAllElections").then(() => {
-      this.elections = this.$store.getters["election/getElections"];
-      var refreshIntervalId = setInterval(() => {
-        if (this.$store.getters["election/dataLoad"]) {
-          this.elections = this.$store.getters["election/getElections"];
-          console.log(this.elections);
-          clearInterval(refreshIntervalId);
-        }
-      }, 500);
-    }); */
+    if (this.$store.getters["elections/getElections"].length == 0) {
+      this.$store.dispatch("elections/setElections");
+    }
   },
 
   methods: {
@@ -165,10 +200,13 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.elections.splice(this.editedIndex, 1);
-      this.closeDelete();
+      this.$store
+        .dispatch("elections/removeElection", this.editedItem.id)
+        .then((response) => {
+          this.$swal("Bravo !", response.data.message, "success");
+          this.closeDelete();
+        });
     },
-
     close() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -186,12 +224,36 @@ export default {
     },
 
     save() {
+
       if (this.editedIndex > -1) {
-        Object.assign(this.elections[this.editedIndex], this.editedItem);
+ 
+        this.$store
+          .dispatch("elections/editElection", this.editedItem)
+          .then((response) => {
+            this.$swal("Bravo !", response.data.message, "success");
+          });
       } else {
-        this.elections.push(this.editedItem);
+        this.$store
+          .dispatch("elections/addElection", this.editedItem)
+          .then((response) => {
+            this.$swal("Bravo !", response.data.message, "success");
+          });
       }
       this.close();
+    },
+
+    triggerInputFile() {
+      this.$refs.input1.click();
+    },
+    changePreview(event) {
+      var reader = new FileReader();
+      var image = event.target.files[0];
+      this.editedItem.photo = event.target.files[0];
+      this.editedItem.changePhoto = true;
+      reader.readAsDataURL(image);
+      reader.onload = () => {
+        this.inputFileSelect = reader.result;
+      };
     },
   },
 };

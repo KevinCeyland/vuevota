@@ -84,10 +84,12 @@ export default {
             })
         },
         addElection({
-            commit
+            commit,
+            dispatch
         }, payload) {
             var arrayPayload = {
                 libelle: payload.libelle,
+                dateElection: payload.dateElection
             }
             return new Promise((resolve, reject) => {
                 axios.post('/election/store', arrayPayload).then((response) => {
@@ -95,6 +97,7 @@ export default {
                         resolve(response)
                     }
                     commit('ADD_ELECTION', response.data.election)
+                    dispatch('setElections')
                     resolve(response)
                 }).catch(function(error) {
                     if (error.response.status === 401) {
@@ -108,17 +111,19 @@ export default {
             })
         },
         editElection({
-            commit
+            commit,
+            dispatch
         }, payload) {
             var arrayPayload = {
                 libelle: payload.libelle,
+                dateElection: payload.dateElection
             }
             return new Promise((resolve, reject) => {
                 axios.put('/election/update/' + payload.id, arrayPayload).then((response) => {
                     if (response.data.messageError) {
                         resolve(response)
                     }
-                    commit('EDIT_ELECTION', response.data.election)
+                    dispatch('setElections')
                     resolve(response)
                 }).catch(function(error) {
                     if (error.response.status === 401) {
