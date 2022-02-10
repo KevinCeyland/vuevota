@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="elections"
+      :items="users"
       sort-by="calories"
       class="elevation-1"
     >
@@ -14,16 +14,6 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="#000091"
-                class="mb-2 text-white"
-                v-bind="attrs"
-                v-on="on"
-              >
-                Créer une nouvelle election
-              </v-btn>
-            </template>
             <v-card>
               <v-card-title>
                 <span class="text-h5">{{ formTitle }}</span>
@@ -34,58 +24,66 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.libelle"
+                        v-model="editedItem.nom"
                         :rules="requiredRules"
                         label="Nom"
                         solo
-                        prepend-inner-icon="mdi-format-title"
+                        prepend-inner-icon="mdi-account"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
-                      <v-dialog
-                        ref="menu"
-                        v-model="menu"
-                        :close-on-content-click="false"
-                        :return-value.sync="editedItem.date_naissance"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="editedItem.dateElection"
-                            label="Date de l'éléction"
-                            prepend-inner-icon="mdi-calendar"
-                            solo
-                            :rules="requiredRules"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="editedItem.dateElection"
-                          no-title
-                          scrollable
-                        >
-                          <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="menu = false">
-                            Retour
-                          </v-btn>
-                          <v-btn
-                            text
-                            color="primary"
-                            @click="
-                              $refs.menu.save(editedItem.dateElection),
-                                (changeDate = Math.floor(
-                                  Math.random() * 10424240
-                                ))
-                            "
-                          >
-                            OK
-                          </v-btn>
-                        </v-date-picker>
-                      </v-dialog>
+                      <v-text-field
+                        v-model="editedItem.prenom"
+                        :rules="requiredRules"
+                        label="Prénom"
+                        solo
+                        prepend-inner-icon="mdi-account"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.email"
+                        :rules="emailRules"
+                         label="Email"
+                        solo
+                        prepend-inner-icon="mdi-at"
+                      ></v-text-field>
+                    </v-col>
+                     <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.carte_identite"
+                        :rules="requiredRules"
+                        label="Carte d'identité"
+                        solo
+                        prepend-inner-icon="mdi-card-account-details"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.rue"
+                        :rules="requiredRules"
+                        label="Rue"
+                        solo
+                        prepend-inner-icon="mdi-map-marker"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.ville"
+                        :rules="requiredRules"
+                        label="Ville"
+                        solo
+                        prepend-inner-icon="mdi-map-marker"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.codePostal"
+                        :rules="requiredRules"
+                        label="Code postal"
+                        solo
+                        prepend-inner-icon="mdi-map-marker"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -105,7 +103,9 @@
               <v-toolbar class="lead">Que voulez-vous faire ?</v-toolbar>
               <v-card-text>
                 <div class="text-dark text-center mt-3">
-                  <h3>Êtes vous sûr de vouloir supprimer ce election ?</h3>
+                  <h3>
+                    Êtes vous sûr de vouloir supprimer cette utilisateur ?
+                  </h3>
                 </div>
               </v-card-text>
               <v-card-actions class="d-flex justify-content-center">
@@ -135,7 +135,7 @@
         </v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary"> Reset </v-btn>
+        <v-btn color="primary"> Réinitialiser </v-btn>
       </template>
     </v-data-table>
   </div>
@@ -147,8 +147,14 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      { text: "Libelle", value: "libelle" },
-      { text: "Date de l'éléction", value: "dateElection" },
+      { text: "Nom", value: "nom" },
+      { text: "Prénom", value: "prenom" },
+      { text: "Email", value: "email" },
+      { text: "Carte d'identité", value: "carte_identite" },
+      { text: "Role", value: "role" },
+      { text: "Rue", value: "rue" },
+      { text: "Ville", value: "ville" },
+      { text: "Code Postal", value: "codePostal" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     requiredRules: [(v) => !!v || "Le champ est obligatoire"],
@@ -156,27 +162,41 @@ export default {
       (v) => !!v || "Le champ est obligatoire",
       (v) => !isNaN(v) || "Ce n'est pas un nombre",
     ],
+    emailRules: [
+      (v) => !!v || "Le champ doit être rempli",
+      (v) => /.+@.+\..+/.test(v) || "L'adresse email est invalide",
+    ],
     numberRulesWithoutRequired: [(v) => !isNaN(v) || "Ce n'est pas un nombre"],
     menu: false,
     editedIndex: -1,
     editedItem: {
-      libelle: "",
-      dateElection: "",
+      nom: "",
+      prenom: "",
+      carte_identite: "",
+      role: "",
+      rue: "",
+      ville: "",
+      codePostal: "",
     },
     defaultItem: {
-      libelle: "",
-      dateElection: "",
+      nom: "",
+      prenom: "",
+      carte_identite: "",
+      role: "",
+      rue: "",
+      ville: "",
+      codePostal: "",
     },
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1
-        ? "Nouvelle éléction"
-        : "Editer l'éléction";
+        ? "Nouvelle utilisateur"
+        : "Editer l'utilisateur";
     },
-    elections() {
-      return this.$store.getters["elections/getElections"];
+    users() {
+      return this.$store.getters["users/getUsers"];
     },
   },
 
@@ -190,27 +210,27 @@ export default {
   },
 
   mounted() {
-    if (this.$store.getters["elections/getElections"].length == 0) {
-      this.$store.dispatch("elections/setElections");
+    if (this.$store.getters["users/getUsers"].length == 0) {
+      this.$store.dispatch("users/setUsers");
     }
   },
 
   methods: {
     editItem(item) {
-      this.editedIndex = this.elections.indexOf(item);
+      this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.elections.indexOf(item);
+      this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
       this.$store
-        .dispatch("elections/removeElection", this.editedItem.id)
+        .dispatch("users/removeUser", this.editedItem.id)
         .then((response) => {
           this.$swal("Bravo !", response.data.message, "success");
           this.closeDelete();
@@ -235,13 +255,13 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         this.$store
-          .dispatch("elections/editElection", this.editedItem)
+          .dispatch("users/editUser", this.editedItem)
           .then((response) => {
             this.$swal("Bravo !", response.data.message, "success");
           });
       } else {
         this.$store
-          .dispatch("elections/addElection", this.editedItem)
+          .dispatch("users/addUser", this.editedItem)
           .then((response) => {
             this.$swal("Bravo !", response.data.message, "success");
           });

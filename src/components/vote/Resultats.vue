@@ -4,6 +4,7 @@
       <h1 class="text-center m-5">Ce vote n'a pas encore de vote en cours</h1>
     </div>
     <div v-else>
+      <h1 class="text-center m-5">Résultat des votes</h1>
       <highcharts
         :options="optionsCharts"
         ref="highcharts"
@@ -30,7 +31,7 @@ export default {
           type: "column",
         },
         title: {
-          text: "Résultat des votes",
+          text: "",
         },
         xAxis: {
           type: "datetime",

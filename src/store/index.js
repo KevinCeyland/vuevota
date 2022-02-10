@@ -5,6 +5,7 @@ import auth from "../store/auth"
 import elections from "./elections.js"
 import candidat from "./candidat.js"
 import resultats from "./resultats.js"
+import users from "./users.js"
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
         elections,
         candidat,
         resultats,
+        users,
     },
 })
 

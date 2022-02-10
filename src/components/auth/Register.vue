@@ -4,7 +4,7 @@
       <v-card-text>
         <v-form ref="registerForm" v-model="valid" lazy-validation>
           <v-row>
-            <v-col cols="12">
+            <v-col cols="6">
               <v-text-field
                 v-model="editedItem.nom"
                 :rules="requiredRules"
@@ -13,7 +13,7 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12">
+            <v-col cols="6">
               <v-text-field
                 v-model="editedItem.prenom"
                 :rules="requiredRules"
@@ -66,7 +66,33 @@
                 required
               ></v-text-field>
             </v-col>
-
+            <v-col cols="6">
+              <v-text-field
+                v-model="editedItem.rue"
+                autocomplete="on"
+                :rules="requiredRules"
+                label="Rue"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="editedItem.codePostal"
+                autocomplete="on"
+                :rules="emailRules"
+                label="Code Postal"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="editedItem.ville"
+                autocomplete="on"
+                :rules="requiredRules"
+                label="Ville"
+                required
+              ></v-text-field>
+            </v-col>
             <v-spacer></v-spacer>
 
             <v-col class="d-flex ml-auto" cols="12">
@@ -141,7 +167,10 @@ export default {
         this.editedItem.prenom != null &&
         this.editedItem.email != null &&
         this.editedItem.password != null &&
-        this.editedItem.carte_identite != null
+        this.editedItem.carte_identite != null &&
+        this.editedItem.rue != null &&
+        this.editedItem.ville != null &&
+        this.editedItem.codePostal != null
       ) {
         return true;
       } else {
@@ -157,7 +186,10 @@ export default {
         formData.append("email", this.editedItem.email);
         formData.append("carte_identite", this.editedItem.carte_identite);
         formData.append("password", this.editedItem.password);
-
+        formData.append("rue", this.editedItem.rue);
+        formData.append("ville", this.editedItem.ville);
+        formData.append("codePostal", this.editedItem.codePostal);
+        
         this.register(formData).then((response) => {
           if (response) {
             this.$swal("Oups !!", response, "error");
