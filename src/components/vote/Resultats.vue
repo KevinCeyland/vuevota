@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="dataCharts.length == 0">
-      <h1 class="text-center m-5">Ce vote n'a pas encore de vote en cours</h1>
+      <h1 class="text-center m-5">Ce vote n'a pas encore de voix</h1>
     </div>
     <div v-else>
       <h1 class="text-center m-5">Résultat des votes</h1>
