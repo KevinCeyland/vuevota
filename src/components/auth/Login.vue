@@ -102,7 +102,7 @@ export default {
             this.msgError = response.data.messageError;
             this.validation = "is-invalid";
           }
-          this.$router.push({ name: "Home" });
+          return;
         }
         this.$router.push({ name: "Home" });
       });

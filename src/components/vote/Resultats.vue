@@ -1,11 +1,16 @@
 <template>
   <div>
-    <highcharts
-      :options="optionsCharts"
-      ref="highcharts"
-      id="highchartsComponent"
-      constructorType="chart"
-    ></highcharts>
+    <div v-if="dataCharts.length == 0">
+      <h1 class="text-center m-5">Ce vote n'a pas encore de vote en cours</h1>
+    </div>
+    <div v-else>
+      <highcharts
+        :options="optionsCharts"
+        ref="highcharts"
+        id="highchartsComponent"
+        constructorType="chart"
+      ></highcharts>
+    </div>
   </div>
 </template>
 
